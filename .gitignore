@@ -1,0 +1,37 @@
+# Entornos Virtuales de Python
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Bytecode y cache de Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Archivos del sistema operativo (macOS / Windows)
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Configuración de editores e IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Descargas de prueba o temporales de multimedia
+*.mp4
+*.mp3
+*.m4a
+*.webm
+*.part
+*.ytdl
+downloads/
