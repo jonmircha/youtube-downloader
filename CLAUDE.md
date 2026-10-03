@@ -40,7 +40,7 @@ Requisitos: **Python 3.10+** (el código usa la sintaxis `dict | None` y `yt-dlp
 El flujo cruza tres archivos:
 
 1. **`youtube_downloader.command`** (launcher): hace `cd` a su propio directorio y valida el `.venv` con `.venv/bin/pip --version`. Si falla (no existe, o la carpeta se movió y las rutas absolutas del venv se rompieron), invoca `./setup.command` y vuelve a verificar. Después actualiza `yt-dlp` como máximo una vez al día: compara la fecha de `.venv/.ultima_actualizacion` (que también toca `setup.command`) y verifica con `curl` que PyPI responda, porque sin conexión `pip install --upgrade` termina con código 0 sin haber actualizado nada. Luego activa el venv y corre el script de Python.
-2. **`setup.command`**: verifica `python3`, ofrece `brew install ffmpeg` si falta, recrea `.venv` desde cero si está roto e instala/actualiza dependencias. Es idempotente; se puede correr cuantas veces sea necesario.
+2. **`setup.command`**: verifica `python3`, ofrece `brew install ffmpeg` si falta, recrea `.venv` desde cero si está roto e instala/actualiza dependencias. Es idempotente; se puede correr cuantas veces sea necesario. Cuando lo invoca el launcher (`DESDE_LAUNCHER=1`) termina sin pausar ni ejecutar `osascript`: ambos comparten la misma ventana y, si la cerrara, mataría al launcher antes de que corra el descargador.
 3. **`youtube_downloader.py`**: flujo lineal basado en `input()` → `obtener_info()` (`extract_info` con `download=False`) → menú MP3/MP4 → `seleccionar_carpeta()` (default `~/Downloads`) → `descargar_mp3()` o `descargar_mp4()`.
 
 Detalles que no son obvios a simple vista:

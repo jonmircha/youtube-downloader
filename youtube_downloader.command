@@ -19,7 +19,7 @@ if [ "$VENV_OK" = false ]; then
     echo "⚠️  Se detectó que el entorno virtual (.venv) no existe o está dañado."
     echo "Iniciando configuración/reparación automática..."
     echo ""
-    ./setup.command
+    DESDE_LAUNCHER=1 ./setup.command
     
     # Comprobar nuevamente si se solucionó
     if [ ! -d ".venv" ] || ! .venv/bin/python3 -c "import sys" &> /dev/null; then

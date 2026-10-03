@@ -95,6 +95,12 @@ else
 fi
 
 echo ""
+
+# Si lo invocó youtube_downloader.command, el launcher controla la ventana y debe seguir corriendo
+if [ -n "$DESDE_LAUNCHER" ]; then
+    exit 0
+fi
+
 read -p "Presiona Enter para finalizar..."
 
 # Cerrar la ventana de Terminal o salir de la aplicación si no hay otras ventanas abiertas
