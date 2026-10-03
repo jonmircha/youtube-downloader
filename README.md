@@ -12,6 +12,7 @@ El proyecto está optimizado especialmente para macOS, permitiendo su ejecución
   - 🎵 **Solo audio (MP3)**: Extrae el audio del video y lo convierte a formato MP3 a 192 kbps.
   - 🎬 **Video completo (MP4)**: Descarga en calidad seleccionable: 1080p (Full HD), 720p (HD), 480p (SD) o la máxima calidad disponible.
 - **Autodiagnóstico y Auto-reparación**: Si mueves la carpeta de ubicación o tu entorno de Python cambia, la herramienta detecta de forma automática que el entorno virtual está roto y lo repara/actualiza antes de correr.
+- **Actualización automática**: Una vez al día, al abrir el descargador, se actualiza `yt-dlp`. YouTube cambia con frecuencia y las versiones viejas dejan de funcionar.
 - **Cierre de terminal controlado**: Al finalizar, cierra la ventana de la terminal y finaliza el proceso de Terminal (si no hay otras ventanas abiertas). Si ocurre un error, mantiene la ventana abierta hasta que presiones Enter para que puedas leer el diagnóstico.
 
 ---
@@ -31,7 +32,7 @@ El proyecto contiene los siguientes archivos principales:
 
 - 📄 [youtube_downloader.py](file:///Users/jonmircha/Sync/My/Taller/youtube-downloader/youtube_downloader.py): Código lógico en Python que realiza las consultas a la API de YouTube y gestiona las descargas usando `yt-dlp`.
 - ⚙️ [youtube_downloader.command](file:///Users/jonmircha/Sync/My/Taller/youtube-downloader/youtube_downloader.command): Acceso directo ejecutable en macOS para iniciar el descargador con un doble clic.
-- 🛠️ [setup.command](file:///Users/jonmircha/Sync/My/Taller/youtube-downloader/setup.command): Script de autodiagnóstico que verifica e instala Python 3, FFmpeg, crea el entorno virtual `.venv` e instala las dependencias (`yt-dlp` y `certifi`).
+- 🛠️ [setup.command](file:///Users/jonmircha/Sync/My/Taller/youtube-downloader/setup.command): Script de autodiagnóstico que verifica e instala Python 3, FFmpeg, crea el entorno virtual `.venv` e instala las dependencias (`yt-dlp`, `yt-dlp-ejs`, `deno` y `certifi`).
 - 📁 `.venv/`: Directorio autogenerado que contiene el entorno virtual aislado con las dependencias necesarias.
 
 ---
@@ -47,7 +48,7 @@ El script realizará las siguientes comprobaciones y acciones:
 1. **Verificará Python 3**: Si no lo tienes, te guiará para descargarlo.
 2. **Verificará FFmpeg**: Si no está instalado pero tienes Homebrew, te ofrecerá instalarlo automáticamente ejecutando `brew install ffmpeg`.
 3. **Creará/Reparará el Entorno Virtual (`.venv`)**: Si no existe o fue dañado al mover la carpeta, lo reconstruirá de cero.
-4. **Instalará las dependencias**: Descargará las últimas versiones estables de `yt-dlp` y `certifi`.
+4. **Instalará las dependencias**: Descargará las últimas versiones estables de `yt-dlp` y `certifi`, además de `yt-dlp-ejs` y `deno` (un runtime de JavaScript). Desde noviembre de 2025, `yt-dlp` los necesita para resolver los desafíos de JavaScript de YouTube; sin ellos, las descargas fallan.
 
 ---
 

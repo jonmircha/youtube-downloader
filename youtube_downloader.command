@@ -29,6 +29,20 @@ if [ "$VENV_OK" = false ]; then
     fi
 fi
 
+# Actualizar yt-dlp una vez al día: YouTube cambia seguido y las versiones viejas dejan de funcionar
+MARCA_ACTUALIZACION=".venv/.ultima_actualizacion"
+if [ -z "$(find "$MARCA_ACTUALIZACION" -mtime -1 2>/dev/null)" ]; then
+    echo "🔄 Buscando actualizaciones de yt-dlp..."
+    # pip termina sin error aunque no haya conexión, por eso primero se verifica que PyPI responda
+    if curl -sf --max-time 5 -o /dev/null https://pypi.org/simple/yt-dlp/ \
+        && .venv/bin/pip install --quiet --upgrade "yt-dlp[default,deno]" certifi; then
+        touch "$MARCA_ACTUALIZACION"
+    else
+        echo "⚠️  No se pudo actualizar yt-dlp (¿sin conexión?). Se usará la versión instalada."
+    fi
+    echo ""
+fi
+
 # Activar el entorno virtual
 source .venv/bin/activate
 

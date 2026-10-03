@@ -79,11 +79,13 @@ fi
 echo ""
 
 # 4. Instalar/Actualizar Dependencias
-echo "📥 Instalando/actualizando dependencias (yt-dlp y certifi)..."
+# [default] incluye yt-dlp-ejs y [deno] el runtime de JavaScript: ambos son necesarios para YouTube
+echo "📥 Instalando/actualizando dependencias (yt-dlp, yt-dlp-ejs, deno y certifi)..."
 .venv/bin/pip install --upgrade pip
-.venv/bin/pip install yt-dlp certifi
+.venv/bin/pip install --upgrade "yt-dlp[default,deno]" certifi
 
 if [ $? -eq 0 ]; then
+    touch .venv/.ultima_actualizacion
     echo ""
     echo "🎉 ¡Configuración completada con éxito!"
     echo "El entorno ha sido reparado/configurado en esta ubicación."

@@ -5,7 +5,7 @@ YouTube Downloader
 Descarga videos de YouTube en formato MP4 o solo el audio en MP3.
 
 Requisitos:
-    pip install yt-dlp
+    pip install "yt-dlp[default,deno]"
 
 Uso:
     python youtube_downloader.py
@@ -25,7 +25,7 @@ import yt_dlp
 
 def obtener_info(url: str) -> dict | None:
     """Obtiene la información del video sin descargarlo."""
-    opciones = {"quiet": True, "no_warnings": True}
+    opciones = {"quiet": True}
     try:
         with yt_dlp.YoutubeDL(opciones) as ydl:
             info = ydl.extract_info(url, download=False)
@@ -38,8 +38,8 @@ def obtener_info(url: str) -> dict | None:
 CARPETA_DEFAULT = os.path.expanduser("~/Downloads")
 
 
-def descargar_mp3(url: str, carpeta_destino: str = CARPETA_DEFAULT) -> None:
-    """Descarga solo el audio del video en formato MP3."""
+def descargar_mp3(url: str, carpeta_destino: str = CARPETA_DEFAULT) -> bool:
+    """Descarga solo el audio del video en formato MP3. Devuelve True si tuvo éxito."""
     opciones = {
         "format": "bestaudio/best",
         "outtmpl": os.path.join(carpeta_destino, "%(title)s.%(ext)s"),
@@ -51,7 +51,6 @@ def descargar_mp3(url: str, carpeta_destino: str = CARPETA_DEFAULT) -> None:
             }
         ],
         "quiet": False,
-        "no_warnings": True,
     }
 
     print("\n🎵 Descargando audio en MP3...")
@@ -59,12 +58,14 @@ def descargar_mp3(url: str, carpeta_destino: str = CARPETA_DEFAULT) -> None:
         with yt_dlp.YoutubeDL(opciones) as ydl:
             ydl.download([url])
         print("\n✅ Audio descargado correctamente.")
+        return True
     except yt_dlp.utils.DownloadError as e:
         print(f"\n❌ Error al descargar el audio: {e}")
+        return False
 
 
-def descargar_mp4(url: str, carpeta_destino: str = CARPETA_DEFAULT, calidad: str = "best") -> None:
-    """Descarga el video en formato MP4."""
+def descargar_mp4(url: str, carpeta_destino: str = CARPETA_DEFAULT, calidad: str = "best") -> bool:
+    """Descarga el video en formato MP4. Devuelve True si tuvo éxito."""
     formatos = {
         "1": "bestvideo[height<=1080][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
         "2": "bestvideo[height<=720][ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
@@ -88,7 +89,6 @@ def descargar_mp4(url: str, carpeta_destino: str = CARPETA_DEFAULT, calidad: str
         "outtmpl": os.path.join(carpeta_destino, "%(title)s.%(ext)s"),
         "merge_output_format": "mp4",
         "quiet": False,
-        "no_warnings": True,
     }
 
     print("\n📥 Descargando video en MP4...")
@@ -96,8 +96,10 @@ def descargar_mp4(url: str, carpeta_destino: str = CARPETA_DEFAULT, calidad: str
         with yt_dlp.YoutubeDL(opciones) as ydl:
             ydl.download([url])
         print("\n✅ Video descargado correctamente.")
+        return True
     except yt_dlp.utils.DownloadError as e:
         print(f"\n❌ Error al descargar el video: {e}")
+        return False
 
 
 def seleccionar_carpeta() -> str:
@@ -140,7 +142,7 @@ def main() -> None:
     print(f"\n📌 Título   : {info.get('title', 'Desconocido')}")
     print(f"⏱️  Duración : {info.get('duration_string', 'N/A')}")
     print(f"👤 Canal    : {info.get('uploader', 'N/A')}")
-    print(f"👁️  Vistas   : {info.get('view_count', 0):,}")
+    print(f"👁️  Vistas   : {info.get('view_count') or 0:,}")
 
     # Seleccionar formato
     print("\n🎛️  ¿Qué deseas descargar?")
@@ -150,12 +152,15 @@ def main() -> None:
 
     opcion = input("\nElige una opción [1-3]: ").strip()
 
+    # Un exit code distinto de 0 hace que el launcher deje la ventana abierta para leer el error
     if opcion == "1":
         carpeta = seleccionar_carpeta()
-        descargar_mp3(url, carpeta)
+        if not descargar_mp3(url, carpeta):
+            sys.exit(1)
     elif opcion == "2":
         carpeta = seleccionar_carpeta()
-        descargar_mp4(url, carpeta)
+        if not descargar_mp4(url, carpeta):
+            sys.exit(1)
     elif opcion == "3":
         print("\n👋 ¡Hasta luego!")
         sys.exit(0)
