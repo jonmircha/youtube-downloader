@@ -8,6 +8,8 @@ CLI interactiva en Python que descarga videos de YouTube como MP4 o extrae el au
 
 Todo el proyecto está en español: identificadores (`obtener_info`, `descargar_mp3`, `carpeta_destino`), mensajes al usuario (con emojis) y documentación. Mantén esa convención.
 
+**Flujo de git:** es un proyecto pequeño. Trabaja, haz commit y push directamente en `main`, sin crear ramas ni Pull Requests.
+
 ## Comandos
 
 No hay tests, linter ni `requirements.txt`. Las dependencias (`"yt-dlp[default,deno]"` y `certifi`, sin versión fija) las instalan los `.command`.
